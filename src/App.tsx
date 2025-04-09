@@ -40,38 +40,51 @@ const queryClient = new QueryClient();
 
 // App component that works in both client and server environments
 export function App({ url }: { url?: string }) {
-  const RouterComponent = url ? StaticRouter : BrowserRouter;
-  const routerProps = url ? { location: url } : {};
+  // Create router content that will be used in both environments
+  const routerContent = (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            {/* Default redirect to preferred language */}
+            <Route path="/" element={<Navigate to="/en" replace />} />
+            
+            {/* Language-prefixed routes */}
+            <Route path="/:lang">
+              <Route index element={<Index />} />
+              <Route path="article/:id" element={<ArticleDetail />} />
+              <Route path="stocks" element={<Stocks />} />
+              <Route path="stocks/:symbol" element={<StockDetail />} />
+              <Route path="admin" element={<Admin />} />
+            </Route>
+            
+            {/* Fallback */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+
+  // Use different router components based on environment
+  if (url) {
+    return (
+      <StaticRouter location={url}>
+        <LanguageProvider>
+          {routerContent}
+        </LanguageProvider>
+      </StaticRouter>
+    );
+  }
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
       <LanguageProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <RouterComponent {...routerProps}>
-            <Suspense fallback={<Loading />}>
-              <Routes>
-                {/* Default redirect to preferred language */}
-                <Route path="/" element={<Navigate to="/en" replace />} />
-                
-                {/* Language-prefixed routes */}
-                <Route path="/:lang">
-                  <Route index element={<Index />} />
-                  <Route path="article/:id" element={<ArticleDetail />} />
-                  <Route path="stocks" element={<Stocks />} />
-                  <Route path="stocks/:symbol" element={<StockDetail />} />
-                  <Route path="admin" element={<Admin />} />
-                </Route>
-                
-                {/* Fallback */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </RouterComponent>
-        </TooltipProvider>
+        {routerContent}
       </LanguageProvider>
-    </QueryClientProvider>
+    </BrowserRouter>
   );
 }
 
