@@ -1,8 +1,7 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Search, ChevronDown } from "lucide-react";
+import { Menu, X, Search, ChevronDown, Bull } from "lucide-react";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -34,9 +33,10 @@ const Header = () => {
     <header className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur ${language === 'he' ? 'rtl' : 'ltr'}`}>
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6 md:gap-10">
-          <Link to={`/${language}`} className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-finance-blue font-montserrat">
-              FinVerse<span className="text-finance-lightBlue">Insight</span>
+          <Link to={`/${language}`} className="flex items-center gap-2">
+            <Bull className="h-8 w-8 text-black" />
+            <span className="text-2xl font-bold text-black font-montserrat">
+              Shora
             </span>
           </Link>
           
