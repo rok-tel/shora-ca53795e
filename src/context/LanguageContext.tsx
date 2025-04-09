@@ -1,5 +1,6 @@
 
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type Language = 'en' | 'he';
 
@@ -14,7 +15,6 @@ const translations = {
     // Navigation
     'nav.home': 'Home',
     'nav.stocks': 'Stocks',
-    'nav.news': 'Latest News',
     'nav.benefits': 'Benefits',
     'nav.admin': 'Admin',
     
@@ -32,6 +32,23 @@ const translations = {
     'benefits.item3': 'Exclusive webinars and events',
     'benefits.item4': 'Personalized investment recommendations',
     'benefits.subscribe': 'Subscribe Now',
+    
+    // Stock page
+    'stocks.title': 'Market Explorer',
+    'stocks.description': 'Track global markets and investment opportunities',
+    'stocks.search': 'Search stocks...',
+    'stocks.marketOverview': 'Market Overview',
+    'stocks.sectors': 'Sectors Performance',
+    'stocks.popularStocks': 'Popular Stocks',
+    'stocks.symbol': 'Symbol',
+    'stocks.price': 'Price',
+    'stocks.change': 'Change',
+    'stocks.volume': 'Volume',
+    'stocks.marketCap': 'Market Cap',
+    'stocks.categories.topStocks': 'Top Stocks',
+    'stocks.categories.crypto': 'Crypto',
+    'stocks.categories.indices': 'Indices',
+    'stocks.categories.watchlist': 'My Watchlist',
     
     // Stock page
     'stock.price': 'Current Price',
@@ -62,7 +79,6 @@ const translations = {
     // Navigation
     'nav.home': 'ראשי',
     'nav.stocks': 'מניות',
-    'nav.news': 'חדשות',
     'nav.benefits': 'הטבות',
     'nav.admin': 'ניהול',
     
@@ -80,6 +96,23 @@ const translations = {
     'benefits.item3': 'וובינרים ואירועים בלעדיים',
     'benefits.item4': 'המלצות השקעה מותאמות אישית',
     'benefits.subscribe': 'הירשם עכשיו',
+    
+    // Stock page
+    'stocks.title': 'סייר שוק',
+    'stocks.description': 'עקוב אחר השווקים העולמיים והזדמנויות השקעה',
+    'stocks.search': 'חפש מניות...',
+    'stocks.marketOverview': 'סקירת שוק',
+    'stocks.sectors': 'ביצועי סקטורים',
+    'stocks.popularStocks': 'מניות פופולריות',
+    'stocks.symbol': 'סמל',
+    'stocks.price': 'מחיר',
+    'stocks.change': 'שינוי',
+    'stocks.volume': 'נפח',
+    'stocks.marketCap': 'שווי שוק',
+    'stocks.categories.topStocks': 'מניות מובילות',
+    'stocks.categories.crypto': 'קריפטו',
+    'stocks.categories.indices': 'מדדים',
+    'stocks.categories.watchlist': 'רשימת מעקב',
     
     // Stock page
     'stock.price': 'מחיר נוכחי',
@@ -111,7 +144,38 @@ const translations = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguageState] = useState<Language>('en');
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Extract language from URL on component mount and location change
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const langParam = searchParams.get('lang');
+    
+    if (langParam === 'he' || langParam === 'en') {
+      if (langParam !== language) {
+        setLanguageState(langParam);
+      }
+    } else if (language !== 'en') {
+      // If no valid language parameter, default to English
+      setLanguageState('en');
+    }
+  }, [location.search, language]);
+
+  // Update URL when language changes
+  const setLanguage = (lang: Language) => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set('lang', lang);
+    
+    // Preserve the current path but update the query params
+    navigate({
+      pathname: location.pathname,
+      search: searchParams.toString()
+    }, { replace: true });
+    
+    setLanguageState(lang);
+  };
 
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations[typeof language]] || key;

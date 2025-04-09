@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Search, ChevronDown } from "lucide-react";
 import { 
@@ -24,7 +24,6 @@ const Header = () => {
   const navLinks = [
     { name: t('nav.home'), path: '/' },
     { name: t('nav.stocks'), path: '/stocks' },
-    { name: t('nav.news'), path: '/news' },
     { name: t('nav.benefits'), path: '/benefits' }
   ];
 
