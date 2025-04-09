@@ -19,7 +19,7 @@ const Header = () => {
   const location = useLocation();
   const { language, t } = useLanguage();
   
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(path + '/');
 
   const navLinks = [
     { name: t('nav.home'), path: '/' },
