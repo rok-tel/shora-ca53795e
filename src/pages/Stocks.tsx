@@ -111,15 +111,15 @@ const StocksPage = () => {
         {/* Page header */}
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold">{t('stocks.title', 'Stocks')}</h1>
-            <p className="text-muted-foreground">{t('stocks.description', 'Track top companies, market indices, and cryptocurrencies')}</p>
+            <h1 className="text-3xl font-bold">{t('stocks.title')}</h1>
+            <p className="text-muted-foreground">{t('stocks.description')}</p>
           </div>
           
           <div className="flex items-center gap-2 w-full md:w-auto">
             <div className="relative flex-1 md:w-64">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder={t('stocks.search', 'Search stocks...')}
+                placeholder={t('stocks.search')}
                 className="pl-8"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -131,7 +131,7 @@ const StocksPage = () => {
         {/* Market overview */}
         <Card>
           <CardHeader>
-            <CardTitle>{t('stocks.marketOverview', 'Market Overview')}</CardTitle>
+            <CardTitle>{t('stocks.marketOverview')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -156,7 +156,7 @@ const StocksPage = () => {
             </div>
             
             <div className="mt-6">
-              <div className="text-sm font-medium mb-3">{t('stocks.sectors', 'Sectors')}</div>
+              <div className="text-sm font-medium mb-3">{t('stocks.sectors')}</div>
               <div className="flex flex-wrap gap-2">
                 {sectors.map((sector) => (
                   <div 
@@ -177,7 +177,7 @@ const StocksPage = () => {
         <NavigationMenu className="max-w-full justify-start">
           <NavigationMenuList className="space-x-2">
             <NavigationMenuItem>
-              <NavigationMenuTrigger>{t('stocks.categories.topStocks', 'Top Stocks')}</NavigationMenuTrigger>
+              <NavigationMenuTrigger>{t('stocks.categories.topStocks')}</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <div className="grid grid-cols-2 gap-3 p-4 w-[400px]">
                   <Link 
@@ -220,7 +220,7 @@ const StocksPage = () => {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>{t('stocks.categories.crypto', 'Crypto')}</NavigationMenuTrigger>
+              <NavigationMenuTrigger>{t('stocks.categories.crypto')}</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <div className="p-4 w-[300px]">
                   <div className="grid grid-cols-1 gap-3">
@@ -253,7 +253,7 @@ const StocksPage = () => {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>{t('stocks.categories.indices', 'Indices')}</NavigationMenuTrigger>
+              <NavigationMenuTrigger>{t('stocks.categories.indices')}</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <div className="p-4 w-[300px]">
                   <div className="grid grid-cols-1 gap-3">
@@ -276,7 +276,7 @@ const StocksPage = () => {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <Link to="/stocks/watchlist">{t('stocks.categories.watchlist', 'Watchlist')}</Link>
+                <Link to="/stocks/watchlist">{t('stocks.categories.watchlist')}</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
@@ -285,7 +285,7 @@ const StocksPage = () => {
         {/* Stocks table */}
         <Card>
           <CardHeader>
-            <CardTitle>{t('stocks.popularStocks', 'Popular Stocks')}</CardTitle>
+            <CardTitle>{t('stocks.popularStocks')}</CardTitle>
           </CardHeader>
           <CardContent>
             <Table className="w-full">
@@ -293,27 +293,27 @@ const StocksPage = () => {
                 <TableRow>
                   <TableHead className="w-[180px] cursor-pointer" onClick={() => requestSort('symbol')}>
                     <div className="flex items-center">
-                      {t('stocks.symbol', 'Symbol')} {getSortIcon('symbol')}
+                      {t('stocks.symbol')} {getSortIcon('symbol')}
                     </div>
                   </TableHead>
                   <TableHead className="cursor-pointer" onClick={() => requestSort('price')}>
                     <div className="flex items-center">
-                      {t('stocks.price', 'Price')} {getSortIcon('price')}
+                      {t('stocks.price')} {getSortIcon('price')}
                     </div>
                   </TableHead>
                   <TableHead className="cursor-pointer" onClick={() => requestSort('change')}>
                     <div className="flex items-center">
-                      {t('stocks.change', 'Change')} {getSortIcon('change')}
+                      {t('stocks.change')} {getSortIcon('change')}
                     </div>
                   </TableHead>
                   <TableHead className="hidden sm:table-cell cursor-pointer" onClick={() => requestSort('volume')}>
                     <div className="flex items-center">
-                      {t('stocks.volume', 'Volume')} {getSortIcon('volume')}
+                      {t('stocks.volume')} {getSortIcon('volume')}
                     </div>
                   </TableHead>
                   <TableHead className="hidden md:table-cell cursor-pointer" onClick={() => requestSort('marketCap')}>
                     <div className="flex items-center">
-                      {t('stocks.marketCap', 'Market Cap')} {getSortIcon('marketCap')}
+                      {t('stocks.marketCap')} {getSortIcon('marketCap')}
                     </div>
                   </TableHead>
                 </TableRow>
@@ -360,3 +360,4 @@ const StocksPage = () => {
 };
 
 export default StocksPage;
+
