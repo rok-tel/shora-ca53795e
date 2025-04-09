@@ -6,11 +6,12 @@ import { useLanguage } from "@/context/LanguageContext";
 
 const News = () => {
   const navigate = useNavigate();
+  const { language } = useLanguage();
   
   // Redirect to home page for now, since we removed the news navigation
   useEffect(() => {
-    navigate('/');
-  }, [navigate]);
+    navigate(`/${language}`);
+  }, [navigate, language]);
 
   return (
     <Layout>

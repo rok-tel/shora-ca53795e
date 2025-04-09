@@ -19,7 +19,10 @@ const Header = () => {
   const location = useLocation();
   const { language, t } = useLanguage();
   
-  const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(path + '/');
+  const isActive = (path: string) => {
+    const currentPath = location.pathname.replace(/^\/(en|he)/, '');
+    return currentPath === path || currentPath.startsWith(path + '/');
+  };
 
   const navLinks = [
     { name: t('nav.home'), path: '/' },
@@ -31,7 +34,7 @@ const Header = () => {
     <header className={`sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur ${language === 'he' ? 'rtl' : 'ltr'}`}>
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6 md:gap-10">
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to={`/${language}`} className="flex items-center space-x-2">
             <span className="text-2xl font-bold text-finance-blue font-montserrat">
               FinVerse<span className="text-finance-lightBlue">Insight</span>
             </span>
@@ -41,7 +44,7 @@ const Header = () => {
             {navLinks.map((link) => (
               <Link 
                 key={link.path}
-                to={link.path}
+                to={`/${language}${link.path}`}
                 className={`text-sm font-medium transition-colors hover:text-finance-lightBlue ${
                   isActive(link.path) ? 'text-finance-blue' : 'text-muted-foreground'
                 }`}
@@ -93,10 +96,10 @@ const Header = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
-                <Link to="/admin">Dashboard</Link>
+                <Link to={`/${language}/admin`}>Dashboard</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to="/admin/new">New Article</Link>
+                <Link to={`/${language}/admin/new`}>New Article</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -120,7 +123,7 @@ const Header = () => {
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
-                  to={link.path}
+                  to={`/${language}${link.path}`}
                   className={`text-lg font-medium transition-colors hover:text-finance-lightBlue ${
                     isActive(link.path) ? 'text-finance-blue' : 'text-muted-foreground'
                   }`}

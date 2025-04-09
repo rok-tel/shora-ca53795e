@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { StaticRouter } from "react-router-dom/server";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,7 +40,7 @@ const queryClient = new QueryClient();
 
 // App component that works in both client and server environments
 export function App({ url }: { url?: string }) {
-  const Router = url ? StaticRouter : BrowserRouter;
+  const RouterComponent = url ? StaticRouter : BrowserRouter;
   const routerProps = url ? { location: url } : {};
 
   return (
@@ -49,19 +49,26 @@ export function App({ url }: { url?: string }) {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <Router {...routerProps}>
+          <RouterComponent {...routerProps}>
             <Suspense fallback={<Loading />}>
               <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/article/:id" element={<ArticleDetail />} />
-                <Route path="/stocks" element={<Stocks />} />
-                <Route path="/stocks/:symbol" element={<StockDetail />} />
-                <Route path="/news" element={<News />} />
-                <Route path="/admin" element={<Admin />} />
+                {/* Default redirect to preferred language */}
+                <Route path="/" element={<Navigate to="/en" replace />} />
+                
+                {/* Language-prefixed routes */}
+                <Route path="/:lang">
+                  <Route index element={<Index />} />
+                  <Route path="article/:id" element={<ArticleDetail />} />
+                  <Route path="stocks" element={<Stocks />} />
+                  <Route path="stocks/:symbol" element={<StockDetail />} />
+                  <Route path="admin" element={<Admin />} />
+                </Route>
+                
+                {/* Fallback */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
-          </Router>
+          </RouterComponent>
         </TooltipProvider>
       </LanguageProvider>
     </QueryClientProvider>

@@ -1,6 +1,5 @@
-
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 type Language = 'en' | 'he';
 
@@ -147,33 +146,31 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [language, setLanguageState] = useState<Language>('en');
   const location = useLocation();
   const navigate = useNavigate();
+  const params = useParams<{ lang?: string }>();
 
-  // Extract language from URL on component mount and location change
+  // Extract language from URL path on component mount and location change
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const langParam = searchParams.get('lang');
+    const urlLang = params.lang as Language | undefined;
     
-    if (langParam === 'he' || langParam === 'en') {
-      if (langParam !== language) {
-        setLanguageState(langParam);
+    if (urlLang === 'he' || urlLang === 'en') {
+      if (urlLang !== language) {
+        setLanguageState(urlLang);
       }
     } else if (language !== 'en') {
       // If no valid language parameter, default to English
       setLanguageState('en');
     }
-  }, [location.search, language]);
+  }, [params.lang, language]);
 
   // Update URL when language changes
   const setLanguage = (lang: Language) => {
-    const searchParams = new URLSearchParams(location.search);
-    searchParams.set('lang', lang);
+    const currentPath = location.pathname;
     
-    // Preserve the current path but update the query params
-    navigate({
-      pathname: location.pathname,
-      search: searchParams.toString()
-    }, { replace: true });
+    // Replace language segment in URL
+    const pathWithoutLang = currentPath.replace(/^\/(en|he)/, '');
+    const newPath = `/${lang}${pathWithoutLang || ''}`;
     
+    navigate(newPath, { replace: true });
     setLanguageState(lang);
   };
 
