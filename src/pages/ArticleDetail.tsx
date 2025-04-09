@@ -19,7 +19,7 @@ const ArticleDetail = () => {
   const [article, setArticle] = useState<Article | null>(null);
   const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -72,7 +72,7 @@ const ArticleDetail = () => {
         <div className="max-w-3xl mx-auto text-center py-16">
           <h1 className="text-2xl font-bold mb-4">Article not found</h1>
           <p className="mb-6">The article you are looking for does not exist or has been removed.</p>
-          <Link to="/" className="text-finance-blue hover:underline">
+          <Link to={`/${language}`} className="text-finance-blue hover:underline">
             Return to homepage
           </Link>
         </div>

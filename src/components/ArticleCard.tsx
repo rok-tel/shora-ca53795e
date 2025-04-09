@@ -32,7 +32,7 @@ const ArticleCard = ({ article, compact = false }: ArticleCardProps) => {
 
   return (
     <Card className="h-full overflow-hidden transition-all hover:shadow-md">
-      <Link to={`/article/${article.id}`} className="block">
+      <Link to={`/${language}/article/${article.id}`} className="block">
         <div className={`relative ${compact ? "h-40" : "h-48"}`}>
           <img 
             src={article.imageUrl} 
@@ -49,8 +49,12 @@ const ArticleCard = ({ article, compact = false }: ArticleCardProps) => {
               {article.summary}
             </p>
           )}
+        </CardContent>
+      </Link>
+      <CardFooter className="px-4 py-3 border-t">
+        <div className="w-full">
           {article.stocks && article.stocks.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="flex flex-wrap gap-2 mb-3">
               {article.stocks.slice(0, 3).map((stock) => (
                 <StockBadge key={stock.symbol} symbol={stock.symbol} />
               ))}
@@ -59,13 +63,13 @@ const ArticleCard = ({ article, compact = false }: ArticleCardProps) => {
               )}
             </div>
           )}
-        </CardContent>
-      </Link>
-      <CardFooter className="px-4 py-3 text-xs text-gray-500 border-t flex justify-between items-center">
-        <span>{article.author}</span>
-        <span>
-          {formatDistanceToNow(new Date(article.publishedAt), { addSuffix: true })}
-        </span>
+          <div className="flex justify-between items-center text-xs text-gray-500">
+            <span>{article.author}</span>
+            <span>
+              {formatDistanceToNow(new Date(article.publishedAt), { addSuffix: true })}
+            </span>
+          </div>
+        </div>
       </CardFooter>
     </Card>
   );

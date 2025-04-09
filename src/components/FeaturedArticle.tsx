@@ -12,7 +12,7 @@ interface FeaturedArticleProps {
 }
 
 const FeaturedArticle = ({ article }: FeaturedArticleProps) => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   return (
     <div className="relative overflow-hidden rounded-xl shadow-md">
@@ -29,21 +29,21 @@ const FeaturedArticle = ({ article }: FeaturedArticleProps) => {
           <div>
             <h2 className="font-bold text-2xl md:text-3xl mb-3">{article.title}</h2>
             <p className="text-gray-600 dark:text-gray-300 mb-4">{article.summary}</p>
-            
-            {article.stocks && article.stocks.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                {article.stocks.map((stock) => (
-                  <StockBadge 
-                    key={stock.symbol} 
-                    symbol={stock.symbol}
-                    price={stock.price} 
-                    change={stock.change} 
-                    showChange={true} 
-                  />
-                ))}
-              </div>
-            )}
           </div>
+          
+          {article.stocks && article.stocks.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {article.stocks.map((stock) => (
+                <StockBadge 
+                  key={stock.symbol} 
+                  symbol={stock.symbol}
+                  price={stock.price} 
+                  change={stock.change} 
+                  showChange={true} 
+                />
+              ))}
+            </div>
+          )}
           
           <div className="mt-4 flex justify-between items-center">
             <div className="text-sm text-gray-500">
@@ -52,7 +52,7 @@ const FeaturedArticle = ({ article }: FeaturedArticleProps) => {
             </div>
             
             <Button asChild>
-              <Link to={`/article/${article.id}`} className="flex items-center gap-2">
+              <Link to={`/${language}/article/${article.id}`} className="flex items-center gap-2">
                 {t('article.readMore')} <ArrowRight size={16} />
               </Link>
             </Button>
