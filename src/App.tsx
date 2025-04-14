@@ -1,4 +1,3 @@
-
 import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -17,6 +16,7 @@ const Stocks = lazy(() => import("./pages/Stocks"));
 const News = lazy(() => import("./pages/News"));
 const Admin = lazy(() => import("./pages/Admin"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Benefits = lazy(() => import("./pages/Benefits"));
 
 const Loading = () => (
   <div className="container mx-auto px-4 py-8">
@@ -61,6 +61,7 @@ export function App({ url }: { url?: string }) {
         <Route path="article/:id" element={<ArticleDetail />} />
         <Route path="stocks" element={<Stocks />} />
         <Route path="stocks/:symbol" element={<StockDetail />} />
+        <Route path="benefits" element={<Benefits />} />
         <Route path="admin" element={<Admin />} />
       </Route>
       
