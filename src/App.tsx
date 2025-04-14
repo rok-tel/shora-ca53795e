@@ -6,7 +6,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "@/context/LanguageContext";
-import { StaticRouter } from "react-router-dom/server";
 import { Skeleton } from "@/components/ui/skeleton";
 import { checkAndSeedData } from "./firebase/seed";
 
@@ -37,63 +36,62 @@ const Loading = () => (
   </div>
 );
 
+// Create query client
 const queryClient = new QueryClient();
 
-// App component that works in both client and server environments
+// App component with client-side only Firebase initialization
 export function App({ url }: { url?: string }) {
-  // Initialize Firebase data if needed
+  // Initialize Firebase data if needed (client-side only)
   useEffect(() => {
-    if (!url) { // Only run on client-side
+    // Only run on client-side
+    if (typeof window !== 'undefined' && !url) {
       checkAndSeedData();
     }
   }, [url]);
 
-  // Create router content that will be used in both environments
-  const routerContent = (
+  // Create routes content that will be used in both environments
+  const routesContent = (
+    <Routes>
+      {/* Default redirect to preferred language */}
+      <Route path="/" element={<Navigate to="/en" replace />} />
+      
+      {/* Language-prefixed routes */}
+      <Route path="/:lang">
+        <Route index element={<Index />} />
+        <Route path="article/:id" element={<ArticleDetail />} />
+        <Route path="stocks" element={<Stocks />} />
+        <Route path="stocks/:symbol" element={<StockDetail />} />
+        <Route path="admin" element={<Admin />} />
+      </Route>
+      
+      {/* Fallback */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+
+  // Main content that will be wrapped in the appropriate router
+  const mainContent = (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <Suspense fallback={<Loading />}>
-          <Routes>
-            {/* Default redirect to preferred language */}
-            <Route path="/" element={<Navigate to="/en" replace />} />
-            
-            {/* Language-prefixed routes */}
-            <Route path="/:lang">
-              <Route index element={<Index />} />
-              <Route path="article/:id" element={<ArticleDetail />} />
-              <Route path="stocks" element={<Stocks />} />
-              <Route path="stocks/:symbol" element={<StockDetail />} />
-              <Route path="admin" element={<Admin />} />
-            </Route>
-            
-            {/* Fallback */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+        <LanguageProvider>
+          <Toaster />
+          <Sonner />
+          <Suspense fallback={<Loading />}>
+            {routesContent}
+          </Suspense>
+        </LanguageProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
 
-  // Use different router components based on environment
+  // For server-side rendering
   if (url) {
-    return (
-      <StaticRouter location={url}>
-        <LanguageProvider>
-          {routerContent}
-        </LanguageProvider>
-      </StaticRouter>
-    );
+    const StaticRouter = require('react-router-dom/server').StaticRouter;
+    return <StaticRouter location={url}>{mainContent}</StaticRouter>;
   }
 
-  return (
-    <BrowserRouter>
-      <LanguageProvider>
-        {routerContent}
-      </LanguageProvider>
-    </BrowserRouter>
-  );
+  // For client-side rendering
+  return <BrowserRouter>{mainContent}</BrowserRouter>;
 }
 
 export default App;
