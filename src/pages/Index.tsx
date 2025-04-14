@@ -1,5 +1,4 @@
-
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import FeaturedArticle from "@/components/FeaturedArticle";
 import NewsSection from "@/components/NewsSection";
@@ -12,9 +11,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Index = () => {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
   const { t } = useLanguage();
+  
+  const { data: articles = [], isLoading } = useQuery({
+    queryKey: ['articles'],
+    queryFn: getArticles
+  });
 
   // Mock trending stocks
   const trendingStocks = [
@@ -28,22 +30,7 @@ const Index = () => {
     { symbol: "XOM", price: 118.45, change: 4.2 }
   ];
 
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const fetchedArticles = await getArticles();
-        setArticles(fetchedArticles);
-      } catch (error) {
-        console.error("Error fetching articles:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchArticles();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <Layout>
         <div className="space-y-8">
