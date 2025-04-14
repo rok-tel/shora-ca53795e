@@ -1,13 +1,21 @@
 
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { MessageSquare, Bell } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const WhatsAppSection = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
   const { toast } = useToast();
+
+  // Prevent hydration mismatch by only rendering after client-side mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,6 +25,11 @@ const WhatsAppSection = () => {
       description: "You'll receive WhatsApp notifications for your selected stocks.",
     });
   };
+
+  // Return null during server-side rendering and initial client render
+  if (!isMounted) {
+    return <div className="py-12 bg-white dark:bg-gray-800 rounded-xl shadow-lg" />;
+  }
 
   return (
     <section className="py-12 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
