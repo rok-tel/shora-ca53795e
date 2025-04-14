@@ -9,9 +9,21 @@ import { getArticles } from "@/api/articleApi";
 import StockBadge from "@/components/StockBadge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { useState } from "react";
+
+const ARTICLES_PER_PAGE = 6;
 
 const Index = () => {
   const { t } = useLanguage();
+  const [page, setPage] = useState(1);
   
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['articles'],
@@ -58,10 +70,14 @@ const Index = () => {
     );
   }
 
+  // Calculate pagination
+  const totalPages = Math.ceil((articles.length - 1) / ARTICLES_PER_PAGE);
+  const startIndex = (page - 1) * ARTICLES_PER_PAGE + 1; // +1 because first article is featured
+  const endIndex = Math.min(startIndex + ARTICLES_PER_PAGE, articles.length);
+
   // Split articles for different sections
   const featuredArticle = articles[0];
-  const latestNews = articles.slice(1, 4);
-  const moreNews = articles.slice(4);
+  const currentPageArticles = articles.slice(startIndex, endIndex);
 
   return (
     <Layout>
@@ -95,15 +111,44 @@ const Index = () => {
           </Card>
         </section>
 
-        {/* Latest news */}
-        <NewsSection title={t('home.latest')} articles={latestNews} />
+        {/* Articles with pagination */}
+        <NewsSection title={t('home.latest')} articles={currentPageArticles} />
         
         {/* Benefits section */}
         <BenefitsSection />
-        
-        {/* More news */}
-        {moreNews.length > 0 && (
-          <NewsSection title="More Stories" articles={moreNews} compact={true} />
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  aria-disabled={page === 1}
+                  className={page === 1 ? 'pointer-events-none opacity-50' : ''}
+                />
+              </PaginationItem>
+              
+              {[...Array(totalPages)].map((_, i) => (
+                <PaginationItem key={i + 1}>
+                  <PaginationLink
+                    onClick={() => setPage(i + 1)}
+                    isActive={page === i + 1}
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                  aria-disabled={page === totalPages}
+                  className={page === totalPages ? 'pointer-events-none opacity-50' : ''}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         )}
       </div>
     </Layout>
