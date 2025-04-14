@@ -1,5 +1,5 @@
 
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { StaticRouter } from "react-router-dom/server";
 import { Skeleton } from "@/components/ui/skeleton";
+import { checkAndSeedData } from "./firebase/seed";
 
 // Lazy-loaded components for code-splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -40,6 +41,13 @@ const queryClient = new QueryClient();
 
 // App component that works in both client and server environments
 export function App({ url }: { url?: string }) {
+  // Initialize Firebase data if needed
+  useEffect(() => {
+    if (!url) { // Only run on client-side
+      checkAndSeedData();
+    }
+  }, [url]);
+
   // Create router content that will be used in both environments
   const routerContent = (
     <QueryClientProvider client={queryClient}>
