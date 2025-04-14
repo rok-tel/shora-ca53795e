@@ -8,6 +8,7 @@ import {
   Video, 
   Target
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const BenefitsSection = () => {
   const { language, t } = useLanguage();
@@ -62,8 +63,10 @@ const BenefitsSection = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Button size="lg" className="bg-finance-blue hover:bg-finance-blue/90">
-            {t('benefits.subscribe')}
+          <Button asChild size="lg" className="bg-finance-blue hover:bg-finance-blue/90">
+            <Link to={`/${language}/benefits`}>
+              {t('benefits.subscribe')}
+            </Link>
           </Button>
         </div>
       </div>
