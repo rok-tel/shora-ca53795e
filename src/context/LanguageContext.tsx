@@ -146,8 +146,9 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
     // Get initial language from URL or browser preference
-    const urlLang = window.location.pathname.split('/')[1] as Language;
-    return urlLang === 'he' || urlLang === 'en' ? urlLang : 
+    const pathSegments = window.location.pathname.split('/');
+    const urlLang = pathSegments[1] as Language;
+    return (urlLang === 'he' || urlLang === 'en') ? urlLang : 
            window.navigator.language.startsWith('he') ? 'he' : 'en';
   });
   
@@ -157,7 +158,9 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   // Extract language from URL path on component mount and location change
   useEffect(() => {
-    const urlLang = params.lang as Language | undefined;
+    // Extract the first path segment after the initial slash
+    const pathSegments = location.pathname.split('/');
+    const urlLang = pathSegments[1] as Language | undefined;
     
     if (urlLang === 'he' || urlLang === 'en') {
       if (urlLang !== language) {
@@ -166,7 +169,18 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     } else {
       // If no valid language parameter, redirect to preferred language
       const preferredLang = window.navigator.language.startsWith('he') ? 'he' : 'en';
-      const newPath = location.pathname.replace(/^\/?/, `/${preferredLang}`);
+      
+      // Generate a new clean path with the preferred language
+      let newPath = '/' + preferredLang;
+      
+      // Add the rest of the path if it exists (skip the first invalid segment)
+      if (pathSegments.length > 1) {
+        const restOfPath = pathSegments.slice(1).join('/');
+        if (restOfPath && !['he', 'en'].includes(restOfPath)) {
+          newPath += '/' + restOfPath;
+        }
+      }
+      
       navigate(newPath, { replace: true });
       setLanguageState(preferredLang);
     }

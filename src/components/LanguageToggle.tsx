@@ -10,7 +10,8 @@ const LanguageToggle = () => {
 
   const toggleLanguage = () => {
     const newLang = language === 'en' ? 'he' : 'en';
-    const newPath = location.pathname.replace(/^\/(en|he)/, `/${newLang}`);
+    // Fix the regex to match the entire language part of the path properly
+    const newPath = location.pathname.replace(/^\/(?:he|en)(?=\/|$)/, `/${newLang}`);
     navigate(newPath);
     setLanguage(newLang);
   };
