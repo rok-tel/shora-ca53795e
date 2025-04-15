@@ -1,3 +1,4 @@
+
 import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -50,12 +51,12 @@ export function App({ url }: { url?: string }) {
 
   const routesContent = (
     <Routes>
-      {/* Default redirect to preferred language based on browser settings */}
+      {/* Default redirect to preferred language */}
       <Route 
         path="/" 
         element={
           <Navigate 
-            to={`/${window.navigator.language.startsWith('he') ? 'he' : 'en'}`} 
+            to={typeof window !== 'undefined' && window.navigator.language.startsWith('he') ? '/he' : '/en'} 
             replace 
           />
         } 

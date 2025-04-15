@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -143,22 +144,34 @@ const translations = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>(() => {
-    // Get initial language from URL or browser preference
-    const pathSegments = window.location.pathname.split('/');
-    const urlLang = pathSegments[1] as Language;
-    return (urlLang === 'he' || urlLang === 'en') ? urlLang : 
-           window.navigator.language.startsWith('he') ? 'he' : 'en';
-  });
+  // Use a safer initial state that works in both server and client environments
+  const [language, setLanguageState] = useState<Language>('en');
+  const [isInitialized, setIsInitialized] = useState(false);
   
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Extract language from URL path on component mount and location change
+  // Initialize language preference once on client-side
   useEffect(() => {
+    if (isInitialized) return;
+    
+    // Get initial language from URL or browser preference
+    const pathSegments = window.location.pathname.split('/').filter(Boolean);
+    const urlLang = pathSegments[0] as Language | undefined;
+    const preferredLang = (urlLang === 'he' || urlLang === 'en') ? urlLang : 
+                         (typeof window !== 'undefined' && window.navigator.language.startsWith('he')) ? 'he' : 'en';
+    
+    setLanguageState(preferredLang);
+    setIsInitialized(true);
+  }, [isInitialized]);
+
+  // Handle URL path changes
+  useEffect(() => {
+    if (!isInitialized) return;
+    
     // Extract the first path segment after the initial slash
-    const pathSegments = location.pathname.split('/');
-    const urlLang = pathSegments[1] as Language | undefined;
+    const pathSegments = location.pathname.split('/').filter(Boolean);
+    const urlLang = pathSegments[0] as Language | undefined;
     
     if (urlLang === 'he' || urlLang === 'en') {
       if (urlLang !== language) {
@@ -166,26 +179,14 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       }
     } else {
       // If no valid language parameter, redirect to preferred language
-      const preferredLang = window.navigator.language.startsWith('he') ? 'he' : 'en';
+      const preferredLang = typeof window !== 'undefined' && window.navigator.language.startsWith('he') ? 'he' : 'en';
       
       // Generate a new clean path with the preferred language
       let newPath = '/' + preferredLang;
       
-      // Add the rest of the path if it exists (skip the first invalid segment)
-      if (pathSegments.length > 1) {
-        // Check if the next segment is a valid route (not a language code)
-        const nextSegment = pathSegments[1];
-        if (nextSegment && !['he', 'en'].includes(nextSegment)) {
-          newPath += '/' + nextSegment;
-          
-          // Add any remaining path segments
-          if (pathSegments.length > 2) {
-            newPath += '/' + pathSegments.slice(2).join('/');
-          }
-        } else if (pathSegments.length > 2) {
-          // Skip the first segment (empty or invalid) and add the rest
-          newPath += '/' + pathSegments.slice(2).join('/');
-        }
+      // Add the existing path if it doesn't have a language code
+      if (pathSegments.length > 0) {
+        newPath += '/' + pathSegments.join('/');
       }
       
       // Add query parameters if they exist
@@ -200,7 +201,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       
       setLanguageState(preferredLang);
     }
-  }, [location.pathname, language, navigate, location.search]);
+  }, [location.pathname, isInitialized, language, navigate, location.search]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
