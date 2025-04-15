@@ -10,8 +10,30 @@ const LanguageToggle = () => {
 
   const toggleLanguage = () => {
     const newLang = language === 'en' ? 'he' : 'en';
-    // Fix the regex to match the entire language part of the path properly
-    const newPath = location.pathname.replace(/^\/(?:he|en)(?=\/|$)/, `/${newLang}`);
+    
+    // Properly replace only the language segment in the path
+    let newPath;
+    
+    // Extract path segments
+    const segments = location.pathname.split('/').filter(Boolean);
+    
+    if (segments.length === 0) {
+      // Root path
+      newPath = `/${newLang}`;
+    } else if (segments[0] === 'en' || segments[0] === 'he') {
+      // Path already has language segment
+      segments[0] = newLang;
+      newPath = '/' + segments.join('/');
+    } else {
+      // Path has no language segment
+      newPath = `/${newLang}/${segments.join('/')}`;
+    }
+    
+    // Preserve query parameters
+    if (location.search) {
+      newPath += location.search;
+    }
+    
     navigate(newPath);
     setLanguage(newLang);
   };

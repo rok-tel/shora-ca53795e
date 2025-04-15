@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -154,7 +153,6 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   
   const location = useLocation();
   const navigate = useNavigate();
-  const params = useParams<{ lang?: string }>();
 
   // Extract language from URL path on component mount and location change
   useEffect(() => {
@@ -175,16 +173,34 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       
       // Add the rest of the path if it exists (skip the first invalid segment)
       if (pathSegments.length > 1) {
-        const restOfPath = pathSegments.slice(1).join('/');
-        if (restOfPath && !['he', 'en'].includes(restOfPath)) {
-          newPath += '/' + restOfPath;
+        // Check if the next segment is a valid route (not a language code)
+        const nextSegment = pathSegments[1];
+        if (nextSegment && !['he', 'en'].includes(nextSegment)) {
+          newPath += '/' + nextSegment;
+          
+          // Add any remaining path segments
+          if (pathSegments.length > 2) {
+            newPath += '/' + pathSegments.slice(2).join('/');
+          }
+        } else if (pathSegments.length > 2) {
+          // Skip the first segment (empty or invalid) and add the rest
+          newPath += '/' + pathSegments.slice(2).join('/');
         }
       }
       
-      navigate(newPath, { replace: true });
+      // Add query parameters if they exist
+      if (location.search) {
+        newPath += location.search;
+      }
+      
+      // Only navigate if we're not already on this path
+      if (location.pathname !== newPath) {
+        navigate(newPath, { replace: true });
+      }
+      
       setLanguageState(preferredLang);
     }
-  }, [params.lang, language, navigate, location]);
+  }, [location.pathname, language, navigate, location.search]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
