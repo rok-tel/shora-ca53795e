@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -143,7 +144,13 @@ const translations = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>('en');
+  const [language, setLanguageState] = useState<Language>(() => {
+    // Get initial language from URL or browser preference
+    const urlLang = window.location.pathname.split('/')[1] as Language;
+    return urlLang === 'he' || urlLang === 'en' ? urlLang : 
+           window.navigator.language.startsWith('he') ? 'he' : 'en';
+  });
+  
   const location = useLocation();
   const navigate = useNavigate();
   const params = useParams<{ lang?: string }>();
@@ -156,21 +163,16 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       if (urlLang !== language) {
         setLanguageState(urlLang);
       }
-    } else if (language !== 'en') {
-      // If no valid language parameter, default to English
-      setLanguageState('en');
+    } else {
+      // If no valid language parameter, redirect to preferred language
+      const preferredLang = window.navigator.language.startsWith('he') ? 'he' : 'en';
+      const newPath = location.pathname.replace(/^\/?/, `/${preferredLang}`);
+      navigate(newPath, { replace: true });
+      setLanguageState(preferredLang);
     }
-  }, [params.lang, language]);
+  }, [params.lang, language, navigate, location]);
 
-  // Update URL when language changes
   const setLanguage = (lang: Language) => {
-    const currentPath = location.pathname;
-    
-    // Replace language segment in URL
-    const pathWithoutLang = currentPath.replace(/^\/(en|he)/, '');
-    const newPath = `/${lang}${pathWithoutLang || ''}`;
-    
-    navigate(newPath, { replace: true });
     setLanguageState(lang);
   };
 

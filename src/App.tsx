@@ -39,7 +39,6 @@ const Loading = () => (
 // Create query client
 const queryClient = new QueryClient();
 
-// App component with client-side only Firebase initialization
 export function App({ url }: { url?: string }) {
   // Initialize Firebase data if needed (client-side only)
   useEffect(() => {
@@ -49,11 +48,18 @@ export function App({ url }: { url?: string }) {
     }
   }, [url]);
 
-  // Create routes content that will be used in both environments
   const routesContent = (
     <Routes>
-      {/* Default redirect to preferred language */}
-      <Route path="/" element={<Navigate to="/en" replace />} />
+      {/* Default redirect to preferred language based on browser settings */}
+      <Route 
+        path="/" 
+        element={
+          <Navigate 
+            to={`/${window.navigator.language.startsWith('he') ? 'he' : 'en'}`} 
+            replace 
+          />
+        } 
+      />
       
       {/* Language-prefixed routes */}
       <Route path="/:lang">

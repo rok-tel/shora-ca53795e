@@ -1,12 +1,18 @@
 
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/LanguageContext";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const LanguageToggle = () => {
   const { language, setLanguage } = useLanguage();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'he' : 'en');
+    const newLang = language === 'en' ? 'he' : 'en';
+    const newPath = location.pathname.replace(/^\/(en|he)/, `/${newLang}`);
+    navigate(newPath);
+    setLanguage(newLang);
   };
 
   return (
