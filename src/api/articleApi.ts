@@ -1,129 +1,6 @@
-
-import { collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
-import { db } from "../firebase/config";
 import { Article } from "@/components/ArticleCard";
 
-const COLLECTION_NAME = "articles";
-
-// API functions
-export const getArticles = async (): Promise<Article[]> => {
-  try {
-    const articlesCollection = collection(db, COLLECTION_NAME);
-    const snapshot = await getDocs(articlesCollection);
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    })) as Article[];
-  } catch (error) {
-    console.error("Error fetching articles:", error);
-    return [];
-  }
-};
-
-export const getArticleById = async (id: string): Promise<Article | undefined> => {
-  try {
-    const articleDoc = doc(db, COLLECTION_NAME, id);
-    const snapshot = await getDoc(articleDoc);
-    
-    if (snapshot.exists()) {
-      return {
-        id: snapshot.id,
-        ...snapshot.data()
-      } as Article;
-    } else {
-      return undefined;
-    }
-  } catch (error) {
-    console.error("Error fetching article:", error);
-    return undefined;
-  }
-};
-
-export const getRelatedArticles = async (stockSymbols: string[]): Promise<Article[]> => {
-  try {
-    // This is a simplified approach - in a real app, you might use a more sophisticated query
-    const articlesCollection = collection(db, COLLECTION_NAME);
-    const snapshot = await getDocs(articlesCollection);
-    
-    const articles = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    })) as Article[];
-    
-    // Filter articles that have any of the stock symbols
-    const related = articles.filter(article => {
-      return article.stocks?.some(stock => stockSymbols.includes(stock.symbol));
-    }).slice(0, 3); // Just the first 3 matching articles
-    
-    return related;
-  } catch (error) {
-    console.error("Error fetching related articles:", error);
-    return [];
-  }
-};
-
-export const createArticle = async (article: Omit<Article, 'id'>): Promise<Article> => {
-  try {
-    const articlesCollection = collection(db, COLLECTION_NAME);
-    const docRef = await addDoc(articlesCollection, article);
-    
-    return {
-      id: docRef.id,
-      ...article
-    };
-  } catch (error) {
-    console.error("Error creating article:", error);
-    throw new Error("Failed to create article");
-  }
-};
-
-export const updateArticle = async (id: string, updates: Partial<Article>): Promise<Article> => {
-  try {
-    const articleDoc = doc(db, COLLECTION_NAME, id);
-    await updateDoc(articleDoc, updates as any);
-    
-    // Get the updated document
-    const updatedDoc = await getDoc(articleDoc);
-    
-    if (!updatedDoc.exists()) {
-      throw new Error("Article not found");
-    }
-    
-    return {
-      id: updatedDoc.id,
-      ...updatedDoc.data()
-    } as Article;
-  } catch (error) {
-    console.error("Error updating article:", error);
-    throw new Error("Failed to update article");
-  }
-};
-
-export const deleteArticle = async (id: string): Promise<void> => {
-  try {
-    const articleDoc = doc(db, COLLECTION_NAME, id);
-    await deleteDoc(articleDoc);
-  } catch (error) {
-    console.error("Error deleting article:", error);
-    throw new Error("Failed to delete article");
-  }
-};
-
-// Function to add the initial mock data to Firebase (can be used once to set up the database)
-export const seedInitialData = async (mockArticles: Article[]): Promise<void> => {
-  try {
-    const articlesCollection = collection(db, COLLECTION_NAME);
-    for (const article of mockArticles) {
-      const { id, ...articleData } = article;
-      await addDoc(articlesCollection, articleData);
-    }
-    console.log("Successfully seeded initial data");
-  } catch (error) {
-    console.error("Error seeding initial data:", error);
-  }
-};
-
-// Mock data for reference and initial seeding - can be removed after first use
+// Mock data for articles
 const mockArticles: Article[] = [
   {
     id: "1",
@@ -270,3 +147,51 @@ Energy stocks rallied on the news, with major oil companies seeing significant g
     ]
   }
 ];
+
+// API functions now using mock data
+export const getArticles = async (): Promise<Article[]> => {
+  return Promise.resolve(mockArticles);
+};
+
+export const getArticleById = async (id: string): Promise<Article | undefined> => {
+  return Promise.resolve(mockArticles.find(article => article.id === id));
+};
+
+export const getRelatedArticles = async (stockSymbols: string[]): Promise<Article[]> => {
+  const related = mockArticles.filter(article => {
+    return article.stocks?.some(stock => stockSymbols.includes(stock.symbol));
+  }).slice(0, 3);
+  
+  return Promise.resolve(related);
+};
+
+export const createArticle = async (article: Omit<Article, 'id'>): Promise<Article> => {
+  const newArticle = {
+    id: Date.now().toString(),
+    ...article
+  };
+  mockArticles.push(newArticle);
+  return Promise.resolve(newArticle);
+};
+
+export const updateArticle = async (id: string, updates: Partial<Article>): Promise<Article> => {
+  const index = mockArticles.findIndex(article => article.id === id);
+  if (index === -1) {
+    throw new Error("Article not found");
+  }
+  
+  mockArticles[index] = {
+    ...mockArticles[index],
+    ...updates
+  };
+  
+  return Promise.resolve(mockArticles[index]);
+};
+
+export const deleteArticle = async (id: string): Promise<void> => {
+  const index = mockArticles.findIndex(article => article.id === id);
+  if (index !== -1) {
+    mockArticles.splice(index, 1);
+  }
+  return Promise.resolve();
+};

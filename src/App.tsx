@@ -1,4 +1,3 @@
-
 import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -7,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
-import { checkAndSeedData } from "./firebase/seed";
 
 // Lazy-loaded components for code-splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -41,14 +39,6 @@ const Loading = () => (
 const queryClient = new QueryClient();
 
 export function App({ url }: { url?: string }) {
-  // Initialize Firebase data if needed (client-side only)
-  useEffect(() => {
-    // Only run on client-side
-    if (typeof window !== 'undefined' && !url) {
-      checkAndSeedData();
-    }
-  }, [url]);
-
   const routesContent = (
     <Routes>
       {/* Default redirect to preferred language */}
