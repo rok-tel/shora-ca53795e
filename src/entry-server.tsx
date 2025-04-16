@@ -3,7 +3,6 @@ import { renderToString } from "react-dom/server";
 import { App } from "./App";
 import { getArticles } from "./api/articleApi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { dehydrate } from "@tanstack/react-query";
 
 export async function render(url: string) {
   // Create a new QueryClient instance
@@ -15,18 +14,16 @@ export async function render(url: string) {
     queryFn: getArticles
   });
 
-  // Get the dehydrated state
-  const dehydratedState = dehydrate(queryClient);
-
-  // Render the app to string
+  // Render the app to string with matching providers
   const html = renderToString(
     <QueryClientProvider client={queryClient}>
       <App url={url} />
     </QueryClientProvider>
   );
 
+  // Return the HTML and state, but don't use dehydrate as it's causing hydration issues
   return { 
     html,
-    state: dehydratedState // This will be used to hydrate the client
+    state: {}  // We'll pass an empty state object to avoid hydration issues
   };
 }

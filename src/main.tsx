@@ -4,7 +4,9 @@ import { App } from './App.tsx'
 import './index.css'
 
 // Wait for DOM to be fully loaded before hydration
-const root = document.getElementById("root");
-if (root) {
-  hydrateRoot(root, <App />);
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const root = document.getElementById("root");
+  if (root) {
+    hydrateRoot(root, <App />);
+  }
+});

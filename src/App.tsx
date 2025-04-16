@@ -1,9 +1,10 @@
+
 import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, StaticRouter } from "react-router-dom";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -36,20 +37,23 @@ const Loading = () => (
 );
 
 // Create query client
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    },
+  },
+});
 
 export function App({ url }: { url?: string }) {
+  // Define routes content
   const routesContent = (
     <Routes>
-      {/* Default redirect to preferred language */}
+      {/* Default redirect to preferred language - using English as default */}
       <Route 
         path="/" 
-        element={
-          <Navigate 
-            to={typeof window !== 'undefined' && window.navigator.language.startsWith('he') ? '/he' : '/en'} 
-            replace 
-          />
-        } 
+        element={<Navigate to="/en" replace />} 
       />
       
       {/* Language-prefixed routes */}
@@ -68,28 +72,36 @@ export function App({ url }: { url?: string }) {
   );
 
   // Main content that will be wrapped in the appropriate router
-  const mainContent = (
+  const content = (
+    <Suspense fallback={<Loading />}>
+      {routesContent}
+    </Suspense>
+  );
+
+  // Wrapped components for both server and client rendering with same structure
+  const wrappedContent = (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <LanguageProvider>
+          {url ? (
+            // Server-side rendering
+            <StaticRouter location={url}>
+              {content}
+            </StaticRouter>
+          ) : (
+            // Client-side rendering
+            <BrowserRouter>
+              {content}
+            </BrowserRouter>
+          )}
           <Toaster />
           <Sonner />
-          <Suspense fallback={<Loading />}>
-            {routesContent}
-          </Suspense>
         </LanguageProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
 
-  // For server-side rendering
-  if (url) {
-    const StaticRouter = require('react-router-dom/server').StaticRouter;
-    return <StaticRouter location={url}>{mainContent}</StaticRouter>;
-  }
-
-  // For client-side rendering
-  return <BrowserRouter>{mainContent}</BrowserRouter>;
+  return wrappedContent;
 }
 
 export default App;
