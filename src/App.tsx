@@ -79,30 +79,33 @@ export function App({ url }: { url?: string }) {
     </Suspense>
   );
 
-  // Wrapped components for both server and client rendering with same structure
-  const wrappedContent = (
+  // Correctly wrap content in the appropriate Router first, 
+  // then Language provider which uses Router hooks
+  return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <LanguageProvider>
-          {url ? (
-            // Server-side rendering
-            <StaticRouter location={url}>
+        {url ? (
+          // Server-side rendering
+          <StaticRouter location={url}>
+            <LanguageProvider>
               {content}
-            </StaticRouter>
-          ) : (
-            // Client-side rendering
-            <BrowserRouter>
+              <Toaster />
+              <Sonner />
+            </LanguageProvider>
+          </StaticRouter>
+        ) : (
+          // Client-side rendering
+          <BrowserRouter>
+            <LanguageProvider>
               {content}
-            </BrowserRouter>
-          )}
-          <Toaster />
-          <Sonner />
-        </LanguageProvider>
+              <Toaster />
+              <Sonner />
+            </LanguageProvider>
+          </BrowserRouter>
+        )}
       </TooltipProvider>
     </QueryClientProvider>
   );
-
-  return wrappedContent;
 }
 
 export default App;

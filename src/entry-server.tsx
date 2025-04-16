@@ -14,14 +14,14 @@ export async function render(url: string) {
     queryFn: getArticles
   });
 
-  // Render the app to string with matching providers
+  // Render the app to string
   const html = renderToString(
     <QueryClientProvider client={queryClient}>
       <App url={url} />
     </QueryClientProvider>
   );
 
-  // Return the HTML and state, but don't use dehydrate as it's causing hydration issues
+  // Return the HTML and state, but don't use dehydrate to avoid hydration issues
   return { 
     html,
     state: {}  // We'll pass an empty state object to avoid hydration issues
