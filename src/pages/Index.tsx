@@ -1,12 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
-import FeaturedArticle from "@/components/FeaturedArticle";
 import NewsSection from "@/components/NewsSection";
 import BenefitsSection from "@/components/BenefitsSection";
 import { Article } from "@/components/ArticleCard";
 import { useLanguage } from "@/context/LanguageContext";
 import { getArticles } from "@/api/articleApi";
-import StockBadge from "@/components/StockBadge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -19,7 +17,7 @@ import {
 } from "@/components/ui/pagination";
 import { useState } from "react";
 
-const ARTICLES_PER_PAGE = 6;
+const ARTICLES_PER_PAGE = 9;
 
 const Index = () => {
   const { t } = useLanguage();
@@ -46,24 +44,17 @@ const Index = () => {
     return (
       <Layout>
         <div className="space-y-8">
-          {/* Featured article skeleton */}
-          <div className="w-full h-96 bg-gray-200 rounded-xl"></div>
-          
-          {/* Latest news skeleton */}
-          <div>
-            <Skeleton className="h-8 w-48 mb-6" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="rounded-lg overflow-hidden">
-                  <Skeleton className="h-48 w-full" />
-                  <div className="p-4 space-y-3">
-                    <Skeleton className="h-6 w-full" />
-                    <Skeleton className="h-4 w-4/5" />
-                    <Skeleton className="h-4 w-3/5" />
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="rounded-lg overflow-hidden">
+                <Skeleton className="h-48 w-full" />
+                <div className="p-4 space-y-3">
+                  <Skeleton className="h-6 w-full" />
+                  <Skeleton className="h-4 w-4/5" />
+                  <Skeleton className="h-4 w-3/5" />
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </Layout>
@@ -71,24 +62,15 @@ const Index = () => {
   }
 
   // Calculate pagination
-  const totalPages = Math.ceil((articles.length - 1) / ARTICLES_PER_PAGE);
-  const startIndex = (page - 1) * ARTICLES_PER_PAGE + 1; // +1 because first article is featured
-  const endIndex = Math.min(startIndex + ARTICLES_PER_PAGE, articles.length);
-
-  // Split articles for different sections
-  const featuredArticle = articles[0];
+  const totalPages = Math.ceil(articles.length / ARTICLES_PER_PAGE);
+  const startIndex = (page - 1) * ARTICLES_PER_PAGE;
+  const endIndex = startIndex + ARTICLES_PER_PAGE;
   const currentPageArticles = articles.slice(startIndex, endIndex);
 
   return (
     <Layout>
       <div className="space-y-10">
-        {/* Featured article */}
-        <section>
-          <h2 className="text-2xl font-bold mb-4">{t('home.featured')}</h2>
-          {featuredArticle && <FeaturedArticle article={featuredArticle} />}
-        </section>
-
-        {/* Trending stocks */}
+        {/* Trending stocks section */}
         <section>
           <h2 className="text-2xl font-bold mb-4">{t('home.trending')}</h2>
           <Card>
@@ -111,7 +93,7 @@ const Index = () => {
           </Card>
         </section>
 
-        {/* Articles with pagination */}
+        {/* Latest news section */}
         <NewsSection title={t('home.latest')} articles={currentPageArticles} />
         
         {/* Benefits section */}
