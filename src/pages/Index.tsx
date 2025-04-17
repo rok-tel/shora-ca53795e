@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/pagination";
 import { useState } from "react";
 
-const ARTICLES_PER_PAGE = 9;
+const ARTICLES_PER_PAGE = 3; // Changed to 3
 
 const Index = () => {
   const { t } = useLanguage();
