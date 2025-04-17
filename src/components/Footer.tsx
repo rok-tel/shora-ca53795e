@@ -27,7 +27,6 @@ const Footer = () => {
             <ul className="space-y-2">
               <li><Link to="/" className="text-gray-300 hover:text-white transition-colors">{t('nav.home')}</Link></li>
               <li><Link to="/stocks" className="text-gray-300 hover:text-white transition-colors">{t('nav.stocks')}</Link></li>
-              <li><Link to="/news" className="text-gray-300 hover:text-white transition-colors">{t('nav.news')}</Link></li>
               <li><Link to="/benefits" className="text-gray-300 hover:text-white transition-colors">{t('nav.benefits')}</Link></li>
             </ul>
           </div>
@@ -72,3 +71,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
