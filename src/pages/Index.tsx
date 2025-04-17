@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import NewsSection from "@/components/NewsSection";
@@ -5,6 +6,7 @@ import BenefitsSection from "@/components/BenefitsSection";
 import { Article } from "@/components/ArticleCard";
 import { useLanguage } from "@/context/LanguageContext";
 import { getArticles } from "@/api/articleApi";
+import StockBadge from "@/components/StockBadge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
