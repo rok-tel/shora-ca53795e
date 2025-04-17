@@ -1,6 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface StockBadgeProps {
   symbol: string;
@@ -18,10 +19,11 @@ const StockBadge = ({
   showChange = false 
 }: StockBadgeProps) => {
   const isPositive = change >= 0;
+  const { language } = useLanguage();
   
   return (
     <Link 
-      to={`/stocks/${symbol}`}
+      to={`/${language}/stocks/${symbol}`}
       className={cn(
         "inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium",
         showChange ? (isPositive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800") : "bg-blue-100 text-blue-800",
