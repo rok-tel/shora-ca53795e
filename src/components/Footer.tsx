@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/context/LanguageContext";
-import { Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
+import { Facebook, Instagram, Twitter, Linkedin, CircleDollarSign } from "lucide-react";
 
 const Footer = () => {
   const { language, t } = useLanguage();
@@ -11,8 +11,13 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-xl font-bold mb-4">FinVerse<span className="text-finance-lightBlue">Insight</span></h3>
-            <p className="text-gray-300 max-w-md">
+            <Link to={`/${language}`} className="flex items-center gap-2">
+              <CircleDollarSign className="h-8 w-8 text-white" />
+              <span className="text-2xl font-bold text-white font-montserrat">
+                Shora
+              </span>
+            </Link>
+            <p className="text-gray-300 max-w-md mt-4">
               Your trusted source for global financial news, analysis, and stock market insights.
             </p>
           </div>
