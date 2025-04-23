@@ -1,8 +1,8 @@
-
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import NewsSection from "@/components/NewsSection";
 import BenefitsSection from "@/components/BenefitsSection";
+import PricingSection from "@/components/PricingSection";
 import { Article } from "@/components/ArticleCard";
 import { useLanguage } from "@/context/LanguageContext";
 import { getArticles } from "@/api/articleApi";
@@ -98,6 +98,9 @@ const Index = () => {
         {/* Latest news section */}
         <NewsSection title={t('home.latest')} articles={currentPageArticles} />
         
+        {/* Pricing section */}
+        <PricingSection />
+
         {/* Benefits section */}
         <BenefitsSection />
 

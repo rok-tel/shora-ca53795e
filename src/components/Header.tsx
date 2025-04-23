@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -27,6 +26,7 @@ const Header = () => {
   const navLinks = [
     { name: t('nav.home'), path: '' },
     { name: t('nav.stocks'), path: '/stocks' },
+    { name: t('nav.articles'), path: '/articles' },
     { name: t('nav.benefits'), path: '/benefits' }
   ];
 

@@ -1,9 +1,9 @@
-
 export const translations = {
   en: {
     // Navigation
     'nav.home': 'Home',
     'nav.stocks': 'Stocks',
+    'nav.articles': 'Articles',
     'nav.benefits': 'Benefits',
     'nav.admin': 'Admin',
     
@@ -63,11 +63,54 @@ export const translations = {
     'footer.copyright': 'Copyright © 2025 FinVerse Insight. All rights reserved.',
     'footer.terms': 'Terms & Conditions',
     'footer.privacy': 'Privacy Policy',
+    
+    // Pricing
+    'pricing.title': 'Simple, Transparent Pricing',
+    'pricing.subtitle': 'Choose the plan that\'s right for you and start building amazing AI applications today.',
+    'pricing.free.title': 'Free',
+    'pricing.free.price': '$0',
+    'pricing.free.period': '/mo',
+    'pricing.free.description': 'Perfect for users who want to try the platform and explore its capabilities',
+    'pricing.free.monthlyMessages': 'Monthly Messages',
+    'pricing.free.dailyMessages': 'Daily Messages',
+    'pricing.free.integrationCredits': 'Integration Credits',
+    'pricing.free.features': 'Features',
+    'pricing.free.feature1': 'Access to all integrations',
+    'pricing.free.feature2': 'Authentication system',
+    'pricing.free.feature3': 'Analytics dashboard',
+    'pricing.free.feature4': 'Database functionality',
+    'pricing.free.cta': 'Get Started Free',
+    
+    'pricing.premium.title': 'Premium',
+    'pricing.premium.price': '$50',
+    'pricing.premium.period': '/mo',
+    'pricing.premium.description': 'Designed for professionals who need higher limits and access to advanced features',
+    'pricing.premium.monthlyMessages': 'Monthly Messages',
+    'pricing.premium.integrationCredits': 'Integration Credits',
+    'pricing.premium.features': 'Features',
+    'pricing.premium.feature1': 'Everything in Free, plus:',
+    'pricing.premium.feature2': 'Custom domains',
+    'pricing.premium.feature3': 'Github integration',
+    'pricing.premium.feature4': 'Premium support',
+    'pricing.premium.cta': 'Get Started',
+    
+    // Articles page
+    'articles.search.title': 'Search Articles',
+    'articles.search.keyword': 'Search by keyword',
+    'articles.search.keywordPlaceholder': 'Enter keywords...',
+    'articles.search.stock': 'Filter by stock',
+    'articles.search.stockPlaceholder': 'Select a stock',
+    'articles.search.dateRange': 'Date range',
+    'articles.search.search': 'Search',
+    'articles.search.reset': 'Reset',
+    'articles.results.title': 'Search Results',
+    'articles.nav': 'Articles',
   },
   he: {
     // Navigation
     'nav.home': 'ראשי',
     'nav.stocks': 'מניות',
+    'nav.articles': 'כתבות',
     'nav.benefits': 'הטבות',
     'nav.admin': 'ניהול',
     
@@ -127,6 +170,48 @@ export const translations = {
     'footer.copyright': 'כל הזכויות שמורות © 2025 FinVerse Insight',
     'footer.terms': 'תנאי שימוש',
     'footer.privacy': 'מדיניות פרטיות',
+    
+    // Pricing
+    'pricing.title': 'תמחור פשוט ושקוף',
+    'pricing.subtitle': 'בחר את התוכנית המתאימה לך והתחל לבנות אפליקציות AI מדהימות כבר היום',
+    'pricing.free.title': 'חינם',
+    'pricing.free.price': '$0',
+    'pricing.free.period': 'לחודש',
+    'pricing.free.description': 'מושלם למשתמשים שרוצים לנסות את הפלטפורמה ולחקור את יכולותיה',
+    'pricing.free.monthlyMessages': 'הודעות חודשיות',
+    'pricing.free.dailyMessages': 'הודעות יומיות',
+    'pricing.free.integrationCredits': 'נקודות אינטגרציה',
+    'pricing.free.features': 'תכונות',
+    'pricing.free.feature1': 'גישה לכל האינטגרציות',
+    'pricing.free.feature2': 'מערכת אימות',
+    'pricing.free.feature3': 'לוח בקרה אנליטי',
+    'pricing.free.feature4': 'פונקציונליות מסד נתונים',
+    'pricing.free.cta': 'התחל בחינם',
+    
+    'pricing.premium.title': 'פרימיום',
+    'pricing.premium.price': '$50',
+    'pricing.premium.period': 'לחודש',
+    'pricing.premium.description': 'מיועד לאנשי מקצוע הזקוקים למגבלות גבוהות יותר וגישה לתכונות מתקדמות',
+    'pricing.premium.monthlyMessages': 'הודעות חודשיות',
+    'pricing.premium.integrationCredits': 'נקודות אינטגרציה',
+    'pricing.premium.features': 'תכונות',
+    'pricing.premium.feature1': 'כל מה שבחינם, ובנוסף:',
+    'pricing.premium.feature2': 'דומיינים מותאמים אישית',
+    'pricing.premium.feature3': 'אינטגרציה עם Github',
+    'pricing.premium.feature4': 'תמיכת פרימיום',
+    'pricing.premium.cta': 'התחל עכשיו',
+    
+    // Articles page
+    'articles.search.title': 'חיפוש כתבות',
+    'articles.search.keyword': 'חיפוש לפי מילות מפתח',
+    'articles.search.keywordPlaceholder': 'הכנס מילות מפתח...',
+    'articles.search.stock': 'סינון לפי מניה',
+    'articles.search.stockPlaceholder': 'בחר מניה',
+    'articles.search.dateRange': 'טווח תאריכים',
+    'articles.search.search': 'חיפוש',
+    'articles.search.reset': 'איפוס',
+    'articles.results.title': 'תוצאות חיפוש',
+    'articles.nav': 'כתבות',
   }
 } as const;
 

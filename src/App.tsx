@@ -1,4 +1,3 @@
-
 import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -12,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 // Lazy-loaded components for code-splitting
 const Index = lazy(() => import("./pages/Index"));
 const ArticleDetail = lazy(() => import("./pages/ArticleDetail"));
+const Articles = lazy(() => import("./pages/Articles"));
 const StockDetail = lazy(() => import("./pages/StockDetail"));
 const Stocks = lazy(() => import("./pages/Stocks"));
 const News = lazy(() => import("./pages/News"));
@@ -60,6 +60,7 @@ export function App({ url }: { url?: string }) {
       {/* Language-prefixed routes */}
       <Route path="/:lang">
         <Route index element={<Index />} />
+        <Route path="articles" element={<Articles />} />
         <Route path="article/:id" element={<ArticleDetail />} />
         <Route path="stocks" element={<Stocks />} />
         <Route path="stocks/:symbol" element={<StockDetail />} />
