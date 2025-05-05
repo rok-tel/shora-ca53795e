@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
@@ -7,7 +6,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, TrendingUp, TrendingDown, ArrowUpDown } from "lucide-react";
+import { Search, TrendingUp, TrendingDown, ArrowUpDown, Bitcoin } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -56,6 +55,12 @@ const sectors = [
   { name: "Consumer Cyclical", change: 1.2 },
   { name: "Energy", change: -0.8 },
   { name: "Industrials", change: 0.2 }
+];
+
+// Crypto data
+const cryptoData = [
+  { symbol: "BTC-USD", name: "Bitcoin", price: 75420.50, change: 5.2, volume: 42516700000, marketCap: 1479000000000 },
+  { symbol: "ETH-USD", name: "Ethereum", price: 3875.25, change: 3.7, volume: 18394500000, marketCap: 465000000000 }
 ];
 
 const StocksPage = () => {
@@ -153,6 +158,43 @@ const StocksPage = () => {
                         <TrendingDown className="h-4 w-4 mr-1" />
                       )}
                       {index.change >= 0 ? "+" : ""}{index.change}%
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Crypto section */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Crypto</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {cryptoData.map((crypto) => (
+                  <div 
+                    key={crypto.symbol} 
+                    className="p-4 border rounded-lg bg-card shadow-sm transition-all hover:shadow-md"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Bitcoin className="h-4 w-4" />
+                      <div className="text-sm text-muted-foreground">{crypto.symbol}</div>
+                    </div>
+                    <div className="text-2xl font-bold">${crypto.price.toLocaleString()}</div>
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="text-sm font-medium">{crypto.name}</span>
+                      <span
+                        className={`text-sm flex items-center ${
+                          crypto.change >= 0 ? "text-finance-green" : "text-finance-red"
+                        }`}
+                      >
+                        {crypto.change >= 0 ? (
+                          <TrendingUp className="h-4 w-4 mr-1" />
+                        ) : (
+                          <TrendingDown className="h-4 w-4 mr-1" />
+                        )}
+                        {crypto.change >= 0 ? "+" : ""}{crypto.change}%
+                      </span>
+                    </div>
+                    <div className="mt-2 text-xs text-muted-foreground">
+                      Market Cap: ${(crypto.marketCap / 1000000000).toFixed(2)}B
                     </div>
                   </div>
                 ))}
