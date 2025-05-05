@@ -134,9 +134,9 @@ const StocksPage = () => {
             <CardTitle>{t('stocks.marketOverview')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-8">
-            {/* Markets section */}
+            {/* Markets section - renamed to Indexes */}
             <div>
-              <h3 className="text-lg font-semibold mb-4">Markets</h3>
+              <h3 className="text-lg font-semibold mb-4">Indexes</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {marketIndices.map((index) => (
                   <div key={index.name} className="p-4 border rounded-lg bg-card shadow-sm transition-all hover:shadow-md">
