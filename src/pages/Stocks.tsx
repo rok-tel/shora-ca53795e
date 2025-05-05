@@ -25,6 +25,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Mock data for stocks
 const stockData = [
@@ -128,48 +129,105 @@ const StocksPage = () => {
           </div>
         </div>
 
-        {/* Market overview */}
+        {/* Market overview with unified design */}
         <Card>
           <CardHeader>
             <CardTitle>{t('stocks.marketOverview')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {marketIndices.map((index) => (
-                <div key={index.name} className="p-4 border rounded-lg">
-                  <div className="text-sm text-muted-foreground">{index.name}</div>
-                  <div className="text-2xl font-bold">{index.value.toLocaleString()}</div>
-                  <div 
-                    className={`text-sm flex items-center ${
-                      index.change >= 0 ? "text-finance-green" : "text-finance-red"
-                    }`}
-                  >
-                    {index.change >= 0 ? (
-                      <TrendingUp className="h-4 w-4 mr-1" />
-                    ) : (
-                      <TrendingDown className="h-4 w-4 mr-1" />
-                    )}
-                    {index.change >= 0 ? "+" : ""}{index.change}%
-                  </div>
+            <Tabs defaultValue="markets" className="w-full">
+              <TabsList className="w-full grid grid-cols-3 mb-4">
+                <TabsTrigger value="markets">Markets</TabsTrigger>
+                <TabsTrigger value="sectors">Sectors</TabsTrigger>
+                <TabsTrigger value="symbols">Symbols</TabsTrigger>
+              </TabsList>
+              
+              {/* Markets tab */}
+              <TabsContent value="markets" className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {marketIndices.map((index) => (
+                    <div key={index.name} className="p-4 border rounded-lg bg-card shadow-sm transition-all hover:shadow-md">
+                      <div className="text-sm text-muted-foreground">{index.name}</div>
+                      <div className="text-2xl font-bold">{index.value.toLocaleString()}</div>
+                      <div 
+                        className={`text-sm flex items-center ${
+                          index.change >= 0 ? "text-finance-green" : "text-finance-red"
+                        }`}
+                      >
+                        {index.change >= 0 ? (
+                          <TrendingUp className="h-4 w-4 mr-1" />
+                        ) : (
+                          <TrendingDown className="h-4 w-4 mr-1" />
+                        )}
+                        {index.change >= 0 ? "+" : ""}{index.change}%
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            
-            <div className="mt-6">
-              <div className="text-sm font-medium mb-3">{t('stocks.sectors')}</div>
-              <div className="flex flex-wrap gap-2">
-                {sectors.map((sector) => (
-                  <div 
-                    key={sector.name} 
-                    className={`text-sm px-3 py-1.5 rounded-full ${
-                      sector.change >= 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {sector.name} {sector.change >= 0 ? "+" : ""}{sector.change}%
-                  </div>
-                ))}
-              </div>
-            </div>
+              </TabsContent>
+              
+              {/* Sectors tab */}
+              <TabsContent value="sectors" className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {sectors.map((sector) => (
+                    <div 
+                      key={sector.name} 
+                      className="p-4 border rounded-lg bg-card shadow-sm transition-all hover:shadow-md"
+                    >
+                      <div className="text-sm text-muted-foreground">Sector</div>
+                      <div className="text-xl font-bold">{sector.name}</div>
+                      <div 
+                        className={`text-sm flex items-center ${
+                          sector.change >= 0 ? "text-finance-green" : "text-finance-red"
+                        }`}
+                      >
+                        {sector.change >= 0 ? (
+                          <TrendingUp className="h-4 w-4 mr-1" />
+                        ) : (
+                          <TrendingDown className="h-4 w-4 mr-1" />
+                        )}
+                        {sector.change >= 0 ? "+" : ""}{sector.change}%
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+              
+              {/* Symbols tab */}
+              <TabsContent value="symbols" className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {stockData.slice(0, 8).map((stock) => (
+                    <div 
+                      key={stock.symbol} 
+                      className="p-4 border rounded-lg bg-card shadow-sm transition-all hover:shadow-md"
+                    >
+                      <div className="flex justify-between">
+                        <span className="text-sm text-muted-foreground">{stock.symbol}</span>
+                        <Link to={`/stocks/${stock.symbol}`} className="text-xs text-primary hover:underline">
+                          Details
+                        </Link>
+                      </div>
+                      <div className="text-lg font-bold truncate">{stock.name}</div>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-base font-medium">${stock.price.toFixed(2)}</span>
+                        <span
+                          className={`text-sm flex items-center ${
+                            stock.change >= 0 ? "text-finance-green" : "text-finance-red"
+                          }`}
+                        >
+                          {stock.change >= 0 ? (
+                            <TrendingUp className="h-4 w-4 mr-1" />
+                          ) : (
+                            <TrendingDown className="h-4 w-4 mr-1" />
+                          )}
+                          {stock.change >= 0 ? "+" : ""}{stock.change}%
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
 
@@ -360,4 +418,3 @@ const StocksPage = () => {
 };
 
 export default StocksPage;
-
