@@ -14,6 +14,18 @@ export const translations = {
     'home.benefits.title': 'Subscriber Benefits',
     'home.benefits.desc': 'Join our premium membership for exclusive financial insights',
     
+    // Home Welcome Section 
+    'home.welcome.title': 'Welcome to Shora',
+    'home.welcome.intro': 'Your trusted platform for financial insights and market intelligence.',
+    'home.welcome.mission.title': 'Our Mission',
+    'home.welcome.mission.description': 'To empower investors with accurate, timely, and actionable financial information.',
+    'home.welcome.feature.market.title': 'Market Data',
+    'home.welcome.feature.market.description': 'Real-time stock prices and market trends.',
+    'home.welcome.feature.insights.title': 'Expert Analysis',
+    'home.welcome.feature.insights.description': 'In-depth research and financial insights.',
+    'home.welcome.feature.tools.title': 'Investment Tools',
+    'home.welcome.feature.tools.description': 'Advanced tools to track and optimize your portfolio.',
+    
     // Benefits
     'benefits.title': 'Premium Subscriber Benefits',
     'benefits.item1': 'Real-time stock alerts',
@@ -121,6 +133,18 @@ export const translations = {
     'home.benefits.title': 'הטבות למנויים',
     'home.benefits.desc': 'הצטרפו למנוי פרימיום לקבלת תובנות פיננסיות בלעדיות',
     
+    // Home Welcome Section 
+    'home.welcome.title': 'ברוכים הבאים לשורה',
+    'home.welcome.intro': 'הפלטפורמה המהימנה שלך לתובנות פיננסיות ומודיעין שוק.',
+    'home.welcome.mission.title': 'המשימה שלנו',
+    'home.welcome.mission.description': 'להעצים משקיעים עם מידע פיננסי מדויק, עדכני, ומעשי.',
+    'home.welcome.feature.market.title': 'נתוני שוק',
+    'home.welcome.feature.market.description': 'מחירי מניות בזמן אמת ומגמות שוק.',
+    'home.welcome.feature.insights.title': 'ניתוח מומחים',
+    'home.welcome.feature.insights.description': 'מחקר מעמיק ותובנות פיננסיות.',
+    'home.welcome.feature.tools.title': 'כלי השקעה',
+    'home.welcome.feature.tools.description': 'כלים מתקדמים למעקב ואופטימיזציה של התיק שלך.',
+    
     // Benefits
     'benefits.title': 'הטבות למנויי פרימיום',
     'benefits.item1': 'התראות מניות בזמן אמת',
@@ -214,4 +238,3 @@ export const translations = {
     'articles.nav': 'כתבות',
   }
 } as const;
-
