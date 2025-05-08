@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import NewsSection from "@/components/NewsSection";
@@ -18,6 +19,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const ARTICLES_PER_PAGE = 3; // Changed to 3
 
@@ -72,6 +74,40 @@ const Index = () => {
   return (
     <Layout>
       <div className="space-y-10">
+        {/* Welcome message */}
+        <section className="mb-8">
+          <Card className="overflow-hidden border-finance-blue border-2">
+            <CardHeader className="bg-gradient-to-r from-finance-blue to-finance-lightBlue text-white">
+              <CardTitle className="text-2xl font-bold">{t('home.welcome.title')}</CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="prose max-w-none">
+                <p className="text-lg mb-4">{t('home.welcome.intro')}</p>
+                <Alert>
+                  <AlertTitle>{t('home.welcome.mission.title')}</AlertTitle>
+                  <AlertDescription>
+                    {t('home.welcome.mission.description')}
+                  </AlertDescription>
+                </Alert>
+                <div className="grid md:grid-cols-3 gap-4 mt-6">
+                  <div className="flex flex-col items-center p-4 bg-gray-50 rounded-lg">
+                    <h3 className="font-bold text-finance-blue">{t('home.welcome.feature.market.title')}</h3>
+                    <p className="text-sm text-center">{t('home.welcome.feature.market.description')}</p>
+                  </div>
+                  <div className="flex flex-col items-center p-4 bg-gray-50 rounded-lg">
+                    <h3 className="font-bold text-finance-blue">{t('home.welcome.feature.insights.title')}</h3>
+                    <p className="text-sm text-center">{t('home.welcome.feature.insights.description')}</p>
+                  </div>
+                  <div className="flex flex-col items-center p-4 bg-gray-50 rounded-lg">
+                    <h3 className="font-bold text-finance-blue">{t('home.welcome.feature.tools.title')}</h3>
+                    <p className="text-sm text-center">{t('home.welcome.feature.tools.description')}</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
         {/* Trending stocks section */}
         <section>
           <h2 className="text-2xl font-bold mb-4">{t('home.trending')}</h2>
