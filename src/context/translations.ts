@@ -75,6 +75,7 @@ export const translations = {
     'footer.copyright': 'Copyright © 2025 FinVerse Insight. All rights reserved.',
     'footer.terms': 'Terms & Conditions',
     'footer.privacy': 'Privacy Policy',
+    'footer.disclaimer': 'Disclaimer: Shora provides financial news and insights for informational purposes only. The content is not intended to be investment advice, nor does it constitute an offer to buy or sell any securities. Always conduct your own research and consult with a qualified financial advisor before making investment decisions.',
     
     // Pricing
     'pricing.title': 'Simple, Transparent Pricing',
@@ -194,6 +195,7 @@ export const translations = {
     'footer.copyright': 'כל הזכויות שמורות © 2025 FinVerse Insight',
     'footer.terms': 'תנאי שימוש',
     'footer.privacy': 'מדיניות פרטיות',
+    'footer.disclaimer': 'הבהרה: שורה מספקת חדשות ותובנות פיננסיות למטרות מידע בלבד. התוכן אינו מיועד להיות ייעוץ השקעות, ו��ינו מהווה הצעה לקנות או למכור ניירות ערך כלשהם. תמיד בצע מחקר עצמאי והתייעץ עם יועץ פיננסי מוסמך לפני קבלת החלטות השקעה.',
     
     // Pricing
     'pricing.title': 'תמחור פשוט ושקוף',

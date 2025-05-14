@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/context/LanguageContext";
-import { Facebook, Instagram, Twitter, Linkedin, CircleDollarSign } from "lucide-react";
+import { Facebook, Instagram, Twitter, Linkedin, CircleDollarSign, ShieldAlert } from "lucide-react";
 
 const Footer = () => {
   const { language, t } = useLanguage();
@@ -54,7 +54,17 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+        {/* Disclaimer section */}
+        <div className="border-t border-gray-700 mt-8 pt-6 mb-4">
+          <div className="flex items-start gap-2">
+            <ShieldAlert className="h-5 w-5 text-amber-400 flex-shrink-0 mt-1" />
+            <p className="text-gray-300 text-sm">
+              {t('footer.disclaimer')}
+            </p>
+          </div>
+        </div>
+        
+        <div className="border-t border-gray-700 mt-4 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-300 text-sm">{t('footer.copyright')}</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link to="/terms" className="text-gray-300 hover:text-white transition-colors text-sm">
@@ -71,4 +81,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
