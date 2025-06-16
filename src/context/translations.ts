@@ -1,3 +1,4 @@
+
 export const translations = {
   en: {
     // Navigation
@@ -117,6 +118,8 @@ export const translations = {
     'articles.search.search': 'Search',
     'articles.search.reset': 'Reset',
     'articles.results.title': 'Search Results',
+    'articles.sections.basic': 'Basic Articles',
+    'articles.sections.advanced': 'Advanced Analysis',
     'articles.nav': 'Articles',
   },
   he: {
@@ -237,6 +240,8 @@ export const translations = {
     'articles.search.search': 'חיפוש',
     'articles.search.reset': 'איפוס',
     'articles.results.title': 'תוצאות חיפוש',
+    'articles.sections.basic': 'כתבות בסיסיות',
+    'articles.sections.advanced': 'ניתוח מתקדם',
     'articles.nav': 'כתבות',
   }
 } as const;

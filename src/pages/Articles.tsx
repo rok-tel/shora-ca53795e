@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
@@ -17,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { DatePickerWithRange } from "@/components/ui/date-range-picker.tsx";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, Search } from "lucide-react";
-import ArticleCard from "@/components/ArticleCard";
+import NewsSection from "@/components/NewsSection";
 import { DateRange } from "react-day-picker";
 import {
   Pagination,
@@ -28,7 +29,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-const ARTICLES_PER_PAGE = 9;
+const ARTICLES_PER_PAGE = 12;
 
 interface SearchFilters {
   keyword: string;
@@ -76,11 +77,14 @@ const Articles = () => {
     return matchesKeyword && matchesStock && matchesDate;
   });
 
-  // Calculate pagination
+  // Divide articles into Basic and Advanced sections
+  const basicArticles = filteredArticles.slice(0, Math.ceil(filteredArticles.length / 2));
+  const advancedArticles = filteredArticles.slice(Math.ceil(filteredArticles.length / 2));
+
+  // Calculate pagination for total articles
   const totalPages = Math.ceil(filteredArticles.length / ARTICLES_PER_PAGE);
   const startIndex = (page - 1) * ARTICLES_PER_PAGE;
   const endIndex = startIndex + ARTICLES_PER_PAGE;
-  const currentPageArticles = filteredArticles.slice(startIndex, endIndex);
 
   const handleSearch = () => {
     setPage(1); // Reset to first page when searching
@@ -168,70 +172,82 @@ const Articles = () => {
           </CardContent>
         </Card>
 
-        {/* Results Section */}
+        {/* Results Summary */}
         <div>
           <h3 className="text-xl font-semibold mb-4">
             {t('articles.results.title')} ({filteredArticles.length})
           </h3>
-          
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <Card key={i} className="animate-pulse">
-                  <div className="h-48 bg-muted rounded-t-lg" />
-                  <CardContent className="p-4">
-                    <div className="h-4 bg-muted rounded w-3/4 mb-2" />
-                    <div className="h-4 bg-muted rounded w-1/2" />
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {currentPageArticles.map((article) => (
-                  <ArticleCard key={article.id} article={article} />
-                ))}
-              </div>
-
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="mt-8">
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          onClick={() => setPage((p) => Math.max(1, p - 1))}
-                          aria-disabled={page === 1}
-                          className={page === 1 ? "pointer-events-none opacity-50" : ""}
-                        />
-                      </PaginationItem>
-
-                      {[...Array(totalPages)].map((_, i) => (
-                        <PaginationItem key={i + 1}>
-                          <PaginationLink
-                            onClick={() => setPage(i + 1)}
-                            isActive={page === i + 1}
-                          >
-                            {i + 1}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
-
-                      <PaginationItem>
-                        <PaginationNext
-                          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                          aria-disabled={page === totalPages}
-                          className={page === totalPages ? "pointer-events-none opacity-50" : ""}
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </div>
-              )}
-            </>
-          )}
         </div>
+
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i} className="animate-pulse">
+                <div className="h-48 bg-muted rounded-t-lg" />
+                <CardContent className="p-4">
+                  <div className="h-4 bg-muted rounded w-3/4 mb-2" />
+                  <div className="h-4 bg-muted rounded w-1/2" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-12">
+            {/* Basic Articles Section */}
+            {basicArticles.length > 0 && (
+              <NewsSection
+                title={t('articles.sections.basic')}
+                articles={basicArticles}
+                compact={false}
+              />
+            )}
+
+            {/* Advanced Articles Section */}
+            {advancedArticles.length > 0 && (
+              <NewsSection
+                title={t('articles.sections.advanced')}
+                articles={advancedArticles}
+                compact={true}
+              />
+            )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-8">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() => setPage((p) => Math.max(1, p - 1))}
+                        aria-disabled={page === 1}
+                        className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+
+                    {[...Array(totalPages)].map((_, i) => (
+                      <PaginationItem key={i + 1}>
+                        <PaginationLink
+                          onClick={() => setPage(i + 1)}
+                          isActive={page === i + 1}
+                        >
+                          {i + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                        aria-disabled={page === totalPages}
+                        className={page === totalPages ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </Layout>
   );
