@@ -28,6 +28,11 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "@/components/ui/resizable";
 
 const ARTICLES_PER_PAGE = 12;
 
@@ -192,24 +197,38 @@ const Articles = () => {
             ))}
           </div>
         ) : (
-          <div className="space-y-12">
-            {/* Basic Articles Section */}
-            {basicArticles.length > 0 && (
-              <NewsSection
-                title={t('articles.sections.basic')}
-                articles={basicArticles}
-                compact={false}
-              />
-            )}
+          <div className="space-y-8">
+            <ResizablePanelGroup direction="vertical" className="min-h-[800px] rounded-lg border">
+              {/* Basic Articles Section */}
+              {basicArticles.length > 0 && (
+                <ResizablePanel defaultSize={50} minSize={30}>
+                  <div className="p-4 h-full overflow-auto">
+                    <NewsSection
+                      title={t('articles.sections.basic')}
+                      articles={basicArticles}
+                      compact={false}
+                    />
+                  </div>
+                </ResizablePanel>
+              )}
+              
+              {basicArticles.length > 0 && advancedArticles.length > 0 && (
+                <ResizableHandle withHandle />
+              )}
 
-            {/* Advanced Articles Section */}
-            {advancedArticles.length > 0 && (
-              <NewsSection
-                title={t('articles.sections.advanced')}
-                articles={advancedArticles}
-                compact={true}
-              />
-            )}
+              {/* Advanced Articles Section */}
+              {advancedArticles.length > 0 && (
+                <ResizablePanel defaultSize={50} minSize={30}>
+                  <div className="p-4 h-full overflow-auto">
+                    <NewsSection
+                      title={t('articles.sections.advanced')}
+                      articles={advancedArticles}
+                      compact={true}
+                    />
+                  </div>
+                </ResizablePanel>
+              )}
+            </ResizablePanelGroup>
 
             {/* Pagination */}
             {totalPages > 1 && (
@@ -253,4 +272,4 @@ const Articles = () => {
   );
 };
 
-export default Articles; 
+export default Articles;
