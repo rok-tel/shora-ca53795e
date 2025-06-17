@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import { useLanguage } from "@/context/LanguageContext";
@@ -45,11 +45,17 @@ interface SearchFilters {
 const Articles = () => {
   const { t } = useLanguage();
   const [page, setPage] = useState(1);
+  const [isClient, setIsClient] = useState(false);
   const [filters, setFilters] = useState<SearchFilters>({
     keyword: "",
     stock: "",
     dateRange: undefined,
   });
+
+  // Client-side only rendering to avoid hydration issues
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ["articles", filters],
@@ -196,7 +202,7 @@ const Articles = () => {
               </Card>
             ))}
           </div>
-        ) : (
+        ) : isClient ? (
           <div className="space-y-8">
             <ResizablePanelGroup direction="vertical" className="min-h-[800px] rounded-lg border">
               {/* Basic Articles Section */}
@@ -265,6 +271,18 @@ const Articles = () => {
                 </Pagination>
               </div>
             )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i} className="animate-pulse">
+                <div className="h-48 bg-muted rounded-t-lg" />
+                <CardContent className="p-4">
+                  <div className="h-4 bg-muted rounded w-3/4 mb-2" />
+                  <div className="h-4 bg-muted rounded w-1/2" />
+                </CardContent>
+              </Card>
+            ))}
           </div>
         )}
       </div>
